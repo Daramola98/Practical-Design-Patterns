@@ -13,7 +13,7 @@ Task.prototype.complete = function() {
 }
 
 Task.prototype.save = function(){
-    // console.log('Saving Task ' + this.name);
+    console.log('Saving Task ' + this.name);
     taskRepo.save(this);
 }
 
