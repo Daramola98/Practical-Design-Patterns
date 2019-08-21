@@ -30,10 +30,18 @@ ObserverList.prototype.add = function (subject) {
 }
 
 ObserverList.prototype.get = function (index) {
-    if(index && index < this.observerList.length){
+    if(index > -1 && index < this.observerList.length){
         return this.observerList[index];
     }
     return null;
+}
+
+ObserverList.prototype.removeAt = function (index) {
+    this.observerList.splice(index, 1);
+}
+
+ObserverList.prototype.find = function (subject) {
+    return this.observerList.indexOf(subject);
 }
 
 var ObservableTask = function (data) {
@@ -47,8 +55,15 @@ ObservableTask.prototype.addObserver = function (observer) {
 
 ObservableTask.prototype.notify = function (context) {
     this.observers.observerList.forEach((observer) => {
-        observer(context);
+        if (typeof observer === 'function') {
+            observer(context);
+        }
     })
+}
+
+ObservableTask.prototype.removeObserver = function (observer) {
+    var observerIndex = this.observers.find(observer);
+    this.observers.removeAt(observerIndex);
 }
 
 ObservableTask.prototype.save = function () {
@@ -65,4 +80,7 @@ task1.addObserver(notify.update);
 task1.addObserver(log.update);
 task1.addObserver(audit.update);
 
+task1.save();
+
+task1.removeObserver(audit.update);
 task1.save();
